@@ -2,6 +2,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			rol: [],
+			token: null,
+			user:{},
 			demo: [
 				{
 					title: "FIRST",
@@ -20,6 +23,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+	
 
 			getMessage: async () => {
 				try{
@@ -31,8 +35,57 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return data;
 				}catch(error){
 					console.log("Error loading message from backend", error)
+				}},
+			register: async (user) => {
+				console.log(user)
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/register",{
+						method:'POST',
+						body:JSON.stringify(user),
+						headers: {
+							"Content-type": "application/json",
+						},
+					},)
+				const data = await resp.json()
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
 				}
+				return {}
 			},
+			login: async (user) => {
+				console.log(user)
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/login",{
+						method:'POST',
+						body:JSON.stringify(user),
+						headers: {
+							"Content-type": "application/json",
+						},
+					},)
+				const data = await resp.json()
+				setStore({token: data.token})
+				localStorage.setItem("token", data.token)
+				setStore({user:data.user})
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return {}
+			},
+			GETrol: async ()=>{
+				const resp = await fetch(process.env.BACKEND_URL + "/api/rol")
+					const data = await resp.json()
+					setStore({ rol: data.rol })
+					console.log(data.rol)
+
+				
+				},
+				Logout:()=>{
+					localStorage.clear()
+					setStore({token:null,user:{}})
+				},
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();

@@ -10,7 +10,7 @@ class User(db.Model):
     last_name = db.Column(db.String(250))
     rol_id = db.Column(db.Integer,db.ForeignKey('rol.id'))
     profesional_de_la_salud = db.relationship("Profesional_de_la_salud",backref='user')
-    post = db.relationship("Post",backref='user')
+    posts = db.relationship("Post",backref='user')
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -23,7 +23,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "rol_id": self.rol_id,
             "profesional_de_salud": self.profesional_de_la_salud,
-            "post": self.post,
+            "posts": list(map(lambda post: post.serialize(), self.posts)),
             # do not serialize the password, its a security breach
         }
 class Rol (db.Model):
@@ -71,8 +71,9 @@ class Post (db.Model):
     # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
-    creado = db.Column(db.DateTime(timezone=True))
-    txt = db.Column(db.String(300),nullable=False)
+    fecha = db.Column(db.DateTime(timezone=True))
+    text = db.Column(db.String(300),nullable=False)
+    title = db.Column(db.String(150),nullable=False)
 
 
     def __repr__(self):
@@ -83,8 +84,8 @@ class Post (db.Model):
         return{
            "id": self.id,
            "user_id": self.user_id,
-           "creado": self.creado,
-           "txt": self.txt,
+           "text": self.text,
+           "title": self.title,
 
         }
       

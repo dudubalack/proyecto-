@@ -5,6 +5,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			rol: [],
 			token: null,
 			user:{},
+			post:[],
+			posts:[],
+			post_privado:[],
 			demo: [
 				{
 					title: "FIRST",
@@ -69,11 +72,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({token: data.token})
 				localStorage.setItem("token", data.token)
 				setStore({user:data.user})
+				return data
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
 				return {}
 			},
+			updateUser:  ()=>{
+				setStore({token: localStorage.getItem("token")})
+				},
 			GETrol: async ()=>{
 				const resp = await fetch(process.env.BACKEND_URL + "/api/rol")
 					const data = await resp.json()
@@ -82,10 +89,68 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				
 				},
-				Logout:()=>{
-					localStorage.clear()
-					setStore({token:null,user:{}})
-				},
+			Logout:()=>{
+				localStorage.clear()
+				setStore({token:null,user:{}})
+			},
+			crear_post: async (post) => {
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/crear-post",{
+						method:'POST',
+						body:JSON.stringify(post),
+						headers: {
+							"Content-type": "application/json",
+							Authorization: "Bearer " + localStorage.getItem("token"),
+						},
+					},)
+				const data = await resp.json()
+				setStore({post: data.post})
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return {}
+			},
+			listar_post: async (post) => {
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/posts",{
+						method:'GET',
+						headers: {
+							
+							Authorization: "Bearer " + localStorage.getItem("token"),
+						},
+					},)
+				const data = await resp.json()
+				setStore({posts: data})
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return {}
+			},
+			listar_privado: async (post) => {
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/post-privado",{
+						method:'GET',
+						headers: {
+							
+							Authorization: "Bearer " + localStorage.getItem("token"),
+						},
+					},)
+				const data = await resp.json()
+				setStore({post_privado: data})
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return {}
+			},
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();

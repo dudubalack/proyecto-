@@ -2,11 +2,12 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Rol
+from api.models import db, User, Rol, Post
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from datetime import datetime
 
 api = Blueprint('api', __name__)
 
@@ -62,3 +63,34 @@ def login():
             return jsonify({'mensage':'datos incorrecto'}),400
     else:
         return jsonify({'mensage':'falta informacion'}),400
+
+@api.route('/crear-post', methods=['POST'])
+@jwt_required()
+def crear_post():
+    user=get_jwt_identity()
+    titulo=request.json.get('title')
+    contenido=request.json.get('text')
+    dia=datetime.now().strftime('%Y-%m-%d')
+    if titulo and contenido:
+        post = Post(title=titulo, text=contenido, user_id=user, fecha=dia)
+        db.session.add(post)
+        db.session.commit()
+        return jsonify({'mensage':'se creo post',"post":post.serialize()}),200
+    else:
+        return jsonify({'mensage':'falta informacion'}),400
+        
+        
+@api.route('/posts', methods=['GET'])
+def listado():
+    posts = Post.query.all()
+    data = [post.serialize() for post in posts]
+    return jsonify(data), 200
+
+@api.route('/post-privado', methods=['GET'])
+@jwt_required()
+def listado_privado():
+    user=get_jwt_identity()
+    
+    posts = Post.query.all()
+    data = [post.serialize() for post in posts]
+    return jsonify(data), 200

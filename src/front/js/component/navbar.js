@@ -29,6 +29,16 @@ export const Navbar = () => {
                 INICIO
               </Link>
             </li>
+            <li className="nav-item">
+                  <button
+                    className="nav-link btn btn-light"
+                    onClick={() => {
+                      navigate("/listado-post");
+                    }}
+                  >
+                    VISUALIZAR POST
+                  </button>
+                </li>
             {!store.token ? (
               <>
                 <li className="nav-item">
@@ -43,7 +53,18 @@ export const Navbar = () => {
                 </li>
               </>
             ) : (
-              <li className="nav-item">
+              <>
+                <li className="nav-item">
+                  <button
+                    className="nav-link btn btn-light"
+                    onClick={() => {
+                      navigate("/crear-post");
+                    }}
+                  >
+                    CREAR POST
+                  </button>
+                </li>
+                <li className="nav-item">
                 <button
                   className="nav-link btn btn-light"
                   onClick={() => {
@@ -54,6 +75,7 @@ export const Navbar = () => {
                   CERRAR SESION
                 </button>
               </li>
+            </>
             )}
           </ul>
           <form className="d-flex" role="search">

@@ -41,7 +41,6 @@ export const Login = () => {
             actions.login(user).then((data)=>{
               if(data.token){
                 navigate("/")
-
               }
             })
             }} className="btn btn-primary">

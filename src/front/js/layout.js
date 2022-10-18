@@ -13,6 +13,7 @@ import { Register } from "./pages/register";
 import { Login } from "./pages/login";
 import Crearpost from "./pages/crearpost";
 import ListadoPost from "./pages/listadopost";
+import DetalleDePost from "./pages/detalledepost";
 
 //create your first component
 const Layout = () => {
@@ -32,6 +33,7 @@ const Layout = () => {
                         <Route element={<Crearpost />} path="/crear-post" />
                         <Route element={<ListadoPost />} path="/listado-post" />
                         <Route element={<Single />} path="/single/:theid" />
+                        <Route element={<DetalleDePost />} path="/post/:id" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />

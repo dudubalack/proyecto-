@@ -94,3 +94,8 @@ def listado_privado():
     posts = Post.query.all()
     data = [post.serialize() for post in posts]
     return jsonify(data), 200
+
+@api.route('/post/<id>', methods=['GET'])
+def detalle_de_post(id):
+    post = Post.query.get(id)
+    return jsonify(post.serialize()), 200

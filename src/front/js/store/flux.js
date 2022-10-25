@@ -165,6 +165,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				return {}
 			},
+			ultimo_post: async (id) => {
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/ultimos-posts/",{
+						method:'GET',
+					},)
+				const data = await resp.json()
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return []
+			},
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();

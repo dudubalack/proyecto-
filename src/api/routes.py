@@ -8,6 +8,7 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from datetime import datetime
+from sqlalchemy import desc
 
 api = Blueprint('api', __name__)
 
@@ -99,3 +100,9 @@ def listado_privado():
 def detalle_de_post(id):
     post = Post.query.get(id)
     return jsonify(post.serialize()), 200
+
+@api.route('/ultimos-posts', methods=['GET'])
+def ultimos_posts():
+    posts = Post.query.order_by(desc(Post.id)).limit(3).all()
+    data = [post.serialize() for post in posts]
+    return jsonify(data), 200

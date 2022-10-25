@@ -8,7 +8,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
-        <Link className="navbar-brand" to={"/"}>
+        <Link className="navbar-brand text-blue" to={"/"}>
           LOGO
         </Link>
         <button
@@ -25,13 +25,13 @@ export const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/"}>
+              <Link className="nav-link active text-blue" aria-current="page" to={"/"}>
                 INICIO
               </Link>
             </li>
             <li className="nav-item">
                   <button
-                    className="nav-link btn btn-light"
+                    className="nav-link btn btn-light text-blue"
                     onClick={() => {
                       navigate("/listado-post");
                     }}
@@ -42,12 +42,12 @@ export const Navbar = () => {
             {!store.token ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to={"/register"}>
+                  <Link className="nav-link text-blue" to={"/register"}>
                     REGISTRO
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to={"/login"}>
+                  <Link className="nav-link text-blue" to={"/login"}>
                     LOGIN
                   </Link>
                 </li>
@@ -56,7 +56,7 @@ export const Navbar = () => {
               <>
                 <li className="nav-item">
                   <button
-                    className="nav-link btn btn-light"
+                    className="nav-link btn btn-light text-blue"
                     onClick={() => {
                       navigate("/crear-post");
                     }}
@@ -66,7 +66,7 @@ export const Navbar = () => {
                 </li>
                 <li className="nav-item">
                 <button
-                  className="nav-link btn btn-light"
+                  className="nav-link btn btn-light text-blue"
                   onClick={() => {
                     actions.Logout();
                     navigate("/");
@@ -82,11 +82,11 @@ export const Navbar = () => {
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Search"
+              placeholder="BUSCAR"
               aria-label="Search"
             />
-            <button className="btn btn-outline-success" type="submit">
-              Search
+            <button className="btn btn-outline-success button-blue" type="submit">
+              BUSCAR
             </button>
           </form>
         </div>

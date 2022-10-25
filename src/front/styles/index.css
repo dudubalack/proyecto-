@@ -1,3 +1,26 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+.text-blue {
+    color: #2f88bc;
+}
+.button-blue {
+    color: #2f88bc;
+    border-color:#2f88bc;
+}
+.button-blue:hover {
+    color: #fff;
+    background-color: #2f88bc;
+    border-color: #2f88bc;
+}
+.button-blue-primary {
+    color: #fff;
+    background-color: #2f88bc;
+    border-color: #2f88bc;
+}
+.button-blue-primary:hover {
+    color: #2f88bc;
+    border-color:#2f88bc;
+    background-color: #fff;
+}

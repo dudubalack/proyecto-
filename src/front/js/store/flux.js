@@ -113,6 +113,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				return {}
 			},
+			eliminar_post: async (post) => {
+				
+				try{
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/eliminarpost",{
+						method:'DELETE',
+						body:JSON.stringify(eliminar-post),
+						headers: {
+							"Content-type": "application/json",
+							Authorization: "Bearer " + localStorage.getItem("token"),
+						},
+					},)
+				const data = await resp.json()
+				setStore({post: data.post})
+				return data
+				}catch(error){
+					console.log("Error loading message from backend", error)
+				}
+				return {}
+			},
 			listar_post: async (post) => {
 				
 				try{

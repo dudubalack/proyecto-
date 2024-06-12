@@ -9,6 +9,13 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from datetime import datetime
 from sqlalchemy import desc
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # Esto habilita CORS para todas las rutas de tu aplicación Flask
+
+# Resto de la configuración de la aplicación Flask
+
 
 api = Blueprint('api', __name__)
 
@@ -81,6 +88,51 @@ def crear_post():
         return jsonify({'mensage':'falta informacion'}),400
         
         
+@api.route('/actualizar-post', methods=['PUT'])
+@jwt_required()
+def actualizar_post(id):
+    user = get_jwt_identity()
+    post = Post.query.get(id)
+
+    if not post:
+        return jsonify({"message": "Post no encontrado"}), 404
+
+    if post.user_id != user:
+        return jsonify({"message": "No tienes permiso para actualizar este post"}), 403
+
+    nuevo_titulo = request.json.get('title')
+    nuevo_contenido = request.json.get('text')
+
+    if nuevo_titulo is not None:
+        post.title = nuevo_titulo
+
+    if nuevo_contenido is not None:
+        post.text = nuevo_contenido
+
+    db.session.commit()
+    
+    return jsonify({"message": "Post actualizado correctamente", "post": post.serialize()}), 200
+
+
+@api.route('/eliminar-post', methods=['DELETE'])
+@jwt_required()
+def eliminar_post(id):
+    user = get_jwt_identity()
+    post = Post.query.get(id)
+
+    if not post:
+        return jsonify({"message": "Post no encontrado"}), 404
+
+    if post.user_id != user:
+        return jsonify({"message": "No tienes permiso para eliminar este post"}), 403
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return jsonify({"message": "Post eliminado correctamente"}), 200
+
+
+
 @api.route('/posts', methods=['GET'])
 def listado():
     posts = Post.query.all()

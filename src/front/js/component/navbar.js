@@ -9,7 +9,9 @@ export const Navbar = () => {
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
         <Link className="navbar-brand text-blue" to={"/"}>
-          LOGO
+          <img 
+          width={100}
+          src="https://www.heart.org/-/media/Images/News/2021/May-2021/0525BHDepressionHeart_SC.jpg"/>
         </Link>
         <button
           className="navbar-toggler"
@@ -26,7 +28,7 @@ export const Navbar = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link className="nav-link active text-blue" aria-current="page" to={"/"}>
-                INICIO
+              INICIO
               </Link>
             </li>
             <li className="nav-item">
@@ -36,19 +38,19 @@ export const Navbar = () => {
                       navigate("/listado-post");
                     }}
                   >
-                    VISUALIZAR POST
+                    VER POST
                   </button>
                 </li>
             {!store.token ? (
               <>
                 <li className="nav-item">
                   <Link className="nav-link text-blue" to={"/register"}>
-                    REGISTRO
+                  REGISTRO
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link text-blue" to={"/login"}>
-                    LOGIN
+                  LOG IN
                   </Link>
                 </li>
               </>
@@ -72,23 +74,12 @@ export const Navbar = () => {
                     navigate("/");
                   }}
                 >
-                  CERRAR SESION
+                  SIGN OFF
                 </button>
               </li>
             </>
             )}
           </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="BUSCAR"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success button-blue" type="submit">
-              BUSCAR
-            </button>
-          </form>
         </div>
       </div>
     </nav>

@@ -1,31 +1,24 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, useParams } from "react-router-dom";
-const ListadoPost = ()=>{
-    const {actions,store} = useContext(Context)
+const DetalleDePost = ()=>{
+    const [post,setpost] = useState({})
+    const params = useParams();
+    const { store, actions } = useContext(Context);
+
+
     useEffect(()=>{
-    actions.listar_post()
+    actions.detalle_de_post(params.id).then(data => setpost(data))
     },[])
-    return (
-        <div className="container mt-2">
-            <div className="row">
-            {
-                store.posts.map((post)=>{
-                return (
-                    <div className="col-12 col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{post.title}</h5>
-                                <p class="card-text">{post.text.length > 30 ? `${post.text.substring(0, 30)}...` : post.text}</p>
-                                <Link to={"/post/"+post.id} class="btn btn-primary">LER MAS</Link>
-                            </div>
-                        </div>
-                    </div>
-                )
-                })
-            }
+ return <div className="container">
+    {
+        post.title ? (
+            <div className="col-12 ">
+                <h3>{post.title}</h3>
+                <p>{post.text}</p>
             </div>
-        </div>
-    )
+        ):""
+    }
+ </div>
 }
-export default ListadoPost
+export default DetalleDePost

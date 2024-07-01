@@ -9,7 +9,7 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import Register from "../pages/register"; // Ajusta la ruta según la ubicación real de Register.js
+import Register from "./pages/register"; // Ajusta la ruta según la ubicación real de Register.js
 import { Login } from "./pages/login";
 import Crearpost from "./pages/crearpost";
 import ListadoPost from "./pages/listadopost";

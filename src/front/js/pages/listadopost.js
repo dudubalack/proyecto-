@@ -1,24 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { Link, useParams } from "react-router-dom";
-const DetalleDePost = ()=>{
-    const [post,setpost] = useState({})
-    const params = useParams();
+
+const ListadoPost = () => {
     const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        actions.getPosts();
+    }, []);
 
-    useEffect(()=>{
-    actions.detalle_de_post(params.id).then(data => setpost(data))
-    },[])
- return <div className="container">
-    {
-        post.title ? (
-            <div className="col-12 ">
-                <h3>{post.title}</h3>
-                <p>{post.text}</p>
-            </div>
-        ):""
-    }
- </div>
-}
-export default DetalleDePost
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this post?')) {
+            fetch(`/api/posts/${id}`, { method: 'DELETE' })
+                .then(() => actions.getPosts());
+        }
+    };
+
+    return (
+        <div className="container">
+            {store.posts.map(post => (
+                <div key={post.id} className="post-item">
+                    <h3>{post.title}</h3>
+                    <p>{post.content}</p>
+                    <Link to={`/post/${post.id}`}>
+                        <button>View</button>
+                    </Link>
+                    <Link to={`/edit/${post.id}`}>
+                        <button>Edit</button>
+                    </Link>
+                    <button onClick={() => handleDelete(post.id)}>Delete</button>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+export default ListadoPost;

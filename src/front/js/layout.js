@@ -9,16 +9,14 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { Register } from "./pages/register";
+import Register from "../pages/register"; // Ajusta la ruta según la ubicación real de Register.js
 import { Login } from "./pages/login";
 import Crearpost from "./pages/crearpost";
 import ListadoPost from "./pages/listadopost";
 import DetalleDePost from "./pages/detalledepost";
+import EditPost from "./pages/editpost";
 
-//create your first component
 const Layout = () => {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
     return (
@@ -34,7 +32,8 @@ const Layout = () => {
                         <Route element={<ListadoPost />} path="/listado-post" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<DetalleDePost />} path="/post/:id" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route element={<EditPost />} path="/edit/:id" />
+                        <Route element={<h1>Not found!</h1>} path="*" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

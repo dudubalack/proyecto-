@@ -7,13 +7,13 @@ const ListadoPost = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.getPosts();
+        actions.listar_post();  // Llamada corregida
     }, []);
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
-            fetch(`/api/posts/${id}`, { method: 'DELETE' })
-                .then(() => actions.getPosts());
+            await actions.eliminar_post(id);  // Llamada corregida
+            actions.listar_post();  // Refrescar la lista de posts
         }
     };
 

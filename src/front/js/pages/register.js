@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { useNavigate } from "react-router-dom";
@@ -12,112 +12,117 @@ const Register = () => {
     last_name: "",
     rol_id: ""
   });
+  const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const data = await actions.GETrol();
+        if (Array.isArray(data.rol)) {
+          setRoles(data.rol);
+        } else {
+          console.error("Roles data is not an array:", data);
+        }
+      } catch (error) {
+        console.error("Error loading roles:", error);
+      }
+    };
+
+    fetchRoles();
+  }, [actions]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await actions.register(user);
+      if (response && response.success) {
+        navigate("/login");
+      } else {
+        console.error("Registration failed:", response);
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
+  };
+
   return (
-    <div className="text-center mt-5 container">
-      <div className="">
-        <h3>Register</h3>
-        <img
-          className="img-fluid rounded float-start w-50 image-register"
-          src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?w=740&t=st=1675366598~exp=1675367198~hmac=4b50179add235dccdcc5847a2e7cd194a0e0514af2f405e39385452395bff979"
-          alt="register-image"
-        />
-        <div className="px-4 py-3">
-          <div className="mb-3">
-            <label htmlFor="exampleDropdownFormEmail1" className="form-label">
-              Correo electrónico
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className="form-control w-50 m-auto"
-              id="exampleDropdownFormEmail1"
-              placeholder="email@example.com"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleDropdownFormPassword1" className="form-label">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={handleChange}
-              className="form-control w-50 m-auto"
-              id="exampleDropdownFormPassword1"
-              placeholder="Password"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleDropdownFormName" className="form-label">
-              Nombre
-            </label>
-            <input
-              type="text"
-              name="first_name"
-              value={user.first_name}
-              onChange={handleChange}
-              className="form-control w-50 m-auto"
-              id="exampleDropdownFormName"
-              placeholder="nombre"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleDropdownFormApellido" className="form-label">
-              Apellido
-            </label>
-            <input
-              type="text"
-              name="last_name"
-              value={user.last_name}
-              onChange={handleChange}
-              className="form-control w-50 m-auto"
-              id="exampleDropdownFormApellido"
-              placeholder="apellido"
-            />
-          </div>
-          <label htmlFor="exampleDropdownFormRol" className="form-label">
-            Elige tu rol
-          </label>
+    <div className="container mt-4">
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="first_name" className="form-label">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="first_name"
+            name="first_name"
+            value={user.first_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="last_name" className="form-label">Last Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="last_name"
+            name="last_name"
+            value={user.last_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="rol_id" className="form-label">Role</label>
           <select
+            id="rol_id"
             name="rol_id"
+            className="form-select"
             value={user.rol_id}
             onChange={handleChange}
-            className="form-select w-50 m-auto"
-            aria-label="Default select example"
+            required
           >
-            <option value="">elige tu rol</option>
-            {store.rol.map((roles) => (
-              <option key={roles.id} value={roles.id}>
-                {roles.rol}
+            <option value="">Select a role</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.name}
               </option>
             ))}
           </select>
-          <div className="mb-3"></div>
-          <button
-            type="submit"
-            onClick={() => {
-              actions.register(user).then((data) => {
-                if (data.user) {
-                  navigate("/");
-                }
-              });
-            }}
-            className="btn btn-primary button-blue-primary"
-          >
-            Registrar
-          </button>
         </div>
-      </div>
+        <button type="submit" className="btn btn-primary">Register</button>
+      </form>
     </div>
   );
 };

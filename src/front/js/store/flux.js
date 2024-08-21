@@ -22,7 +22,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             ]
         },
         actions: {
-            // Example function
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
             },
@@ -83,9 +82,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/rol");
                     const data = await resp.json();
-                    setStore({ rol: data.rol });
+                    if (Array.isArray(data)) {
+                        return data;
+                    } else if (data.rol && Array.isArray(data.rol)) {
+                        return data.rol;
+                    } else {
+                        console.error("Roles data is not an array:", data);
+                        return [];
+                    }
                 } catch (error) {
                     console.log("Error loading roles from backend", error);
+                    return [];
                 }
             },
 
@@ -142,7 +149,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ posts: data });
                     return data;
                 } catch (error) {
-                    console.log("Error loading posts from backend", error);
+                    console.log("Error loading posts", error);
                 }
                 return {};
             },
@@ -159,7 +166,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ post_privado: data });
                     return data;
                 } catch (error) {
-                    console.log("Error loading private posts from backend", error);
+                    console.log("Error loading private posts", error);
                 }
                 return {};
             },
@@ -172,29 +179,25 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const data = await resp.json();
                     return data;
                 } catch (error) {
-                    console.log("Error loading post details from backend", error);
+                    console.log("Error loading post details", error);
                 }
                 return {};
             },
 
             ultimo_post: async () => {
                 try {
-                    const resp = await fetch(process.env.BACKEND_URL + "/api/ultimos-posts/", {
-                        method: 'GET',
-                    });
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/ultimo-post");
                     const data = await resp.json();
-
-                    // Verifica que la respuesta es un array
                     if (Array.isArray(data)) {
                         return data;
                     } else {
-                        console.error("Response is not an array:", data);
+                        console.error("Posts data is not an array:", data);
                         return [];
                     }
                 } catch (error) {
-                    console.log("Error loading latest posts from backend", error);
-                    return [];
+                    console.log("Error loading latest posts", error);
                 }
+                return [];
             },
 
             changeColor: (index, color) => {

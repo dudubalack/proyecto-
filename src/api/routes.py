@@ -48,10 +48,10 @@ def register():
     return jsonify({'user': user.serialize(), 'message': 'Usuario creado'}), 200
 
 @api.route('/rol', methods=['GET'])
-def rol():
-    rol = Rol.query.all()
-    rol_all = list(map(lambda rol: rol.serialize(), rol))
-    return jsonify({"rol": rol_all})
+def get_roles():
+    roles = Rol.query.all()
+    roles_serialized = list(map(lambda rol: rol.serialize(), roles))
+    return jsonify({"rol": roles_serialized})
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -131,3 +131,17 @@ def ultimos_posts():
     posts = Post.query.order_by(desc(Post.id)).limit(3).all()
     data = [post.serialize() for post in posts]
     return jsonify(data), 200
+
+def populate_roles():
+    roles = ['Usuario', 'Profesional de la Salud']
+    for r in roles:
+        if not Rol.query.filter_by(rol=r).first():
+            role = Rol(rol=r)
+            db.session.add(role)
+    db.session.commit()
+    print("Roles added!")
+
+if __name__ == '__main__':
+    with app.app_context():
+        populate_roles()  # Poblar roles al iniciar la aplicación
+        app.run(debug=True)
